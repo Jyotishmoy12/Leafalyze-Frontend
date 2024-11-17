@@ -18,13 +18,13 @@ export default defineConfig({
         background_color: '#ffffff',
         icons: [
           {
-            src: '/logo.png',
+            src: '/logo.png?v=2', // Cache-busting query parameter
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            src: '/logo.png',
+            src: '/logo.png?v=2', // Cache-busting query parameter
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'
@@ -43,16 +43,16 @@ export default defineConfig({
               cacheName: 'leafalyze-cache',
               expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+                maxAgeSeconds: 60 * 60 * 24 * 30 // Cache for 30 days
               },
               cacheableResponse: {
-                statuses: [0, 200]
+                statuses: [0, 200] // Cache successful responses
               }
             }
           }
         ],
-        navigateFallback: '/index.html',
-        navigateFallbackAllowlist: [/^(?!\/__).*/]
+        navigateFallback: '/index.html', // Use SPA navigation fallback
+        navigateFallbackAllowlist: [/^(?!\/__).*/] // Don't cache certain assets like admin routes
       },
       devOptions: {
         enabled: true
@@ -76,4 +76,3 @@ export default defineConfig({
     }
   }
 });
-
