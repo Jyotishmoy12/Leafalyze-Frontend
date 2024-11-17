@@ -18,13 +18,13 @@ export default defineConfig({
         background_color: '#ffffff',
         icons: [
           {
-            src: '/logo.png?v=2', // Cache-busting query parameter
+            src: '/logo.svg.png?v=2', // Cache-busting query parameter
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            src: '/logo.png?v=2', // Cache-busting query parameter
+            src: '/logo.svg.png?v=2', // Cache-busting query parameter
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'
