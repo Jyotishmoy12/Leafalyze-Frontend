@@ -1,7 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
+  const location = useLocation();
+  const isAnalysisPage = location.pathname === '/analysis';
+
+  const buttonProps = isAnalysisPage 
+    ? {
+        to: '/',
+        text: 'Home'
+      }
+    : {
+        to: '/analysis',
+        text: 'Analysis'
+      };
+
   return (
     <nav className="bg-black px-6 py-4 shadow-lg">
       <div className="container mx-auto flex items-center justify-between">
@@ -20,10 +33,10 @@ const Navbar = () => {
         {/* Navigation Links */}
         <div>
           <Link
-            to="/analysis"
+            to={buttonProps.to}
             className="text-white border border-white hover:bg-white hover:text-black px-4 py-2 rounded-md text-sm font-medium shadow-md transition duration-300"
           >
-            Analysis
+            {buttonProps.text}
           </Link>
         </div>
       </div>
