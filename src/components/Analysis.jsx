@@ -8,6 +8,8 @@ const Card = ({ children, className = "" }) => (
   </div>
 );
 
+//comments
+
 const CardHeader = ({ children }) => (
   <div className="p-6 border-b border-gray-100">
     {children}
