@@ -62,7 +62,7 @@ const Analysis = () => {
 
   const checkServerStatus = async () => {
     try {
-      const response = await fetch("http://localhost:5000/health");
+      const response = await fetch("https://leafalyze-backend.onrender.com/health");
       if (response.ok) {
         setServerStatus('online');
       } else {
@@ -185,7 +185,7 @@ const Analysis = () => {
       const formData = new FormData();
       formData.append("image", imageFile);
 
-      const response = await fetch("http://localhost:5000/detect", {
+      const response = await fetch("https://leafalyze-backend.onrender.com/detect", {
         method: "POST",
         body: formData,
       });
