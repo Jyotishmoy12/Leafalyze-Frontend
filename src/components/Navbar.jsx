@@ -21,7 +21,7 @@ const Navbar = () => {
         {/* Logo Section */}
         <div className="flex items-center space-x-2">
           <img
-            src="/logo.svg.png" // Replace with your logo's path
+            src="/logo.png" // Replace with your logo's path
             alt="Logo"
             className="h-10 w-10 object-contain"
           />
