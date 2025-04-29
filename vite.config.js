@@ -37,7 +37,7 @@ export default defineConfig({
         clientsClaim: true,
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/leafalyze\.vercel\.app\/.*/i,
+          urlPattern: /^https:\/\/leafalyze-frontend-kdly\.vercel\.app\/.*/i,
             handler: 'NetworkFirst',
             options: {
               cacheName: 'leafalyze-cache',
