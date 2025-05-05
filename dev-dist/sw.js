@@ -67,7 +67,7 @@ if (!self.define) {
     });
   };
 }
-define(['./workbox-e755d862'], (function (workbox) { 'use strict';
+define(['./workbox-418c2b01'], (function (workbox) { 'use strict';
 
   self.skipWaiting();
   workbox.clientsClaim();
@@ -82,19 +82,27 @@ define(['./workbox-e755d862'], (function (workbox) { 'use strict';
     "revision": "3ca0b8505b4bec776b69afdba2768812"
   }, {
     "url": "/index.html",
-    "revision": "0.6hap5qioqog"
+    "revision": "0.n9sdnskq8qo"
   }], {});
   workbox.cleanupOutdatedCaches();
   workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("/index.html"), {
-    allowlist: [/^\/$/]
+    allowlist: [/^\/$/],
+    denylist: [/^\/api/, /\/admin/]
   }));
-  workbox.registerRoute(/^https:\/\/leafalyze\.vercel\.app\/.*/i, new workbox.NetworkFirst({
+  workbox.registerRoute(/^https:\/\/leafalyze-frontend-kdly\.vercel\.app\/.*/i, new workbox.NetworkFirst({
     "cacheName": "leafalyze-cache",
     plugins: [new workbox.ExpirationPlugin({
       maxEntries: 50,
       maxAgeSeconds: 2592000
     }), new workbox.CacheableResponsePlugin({
       statuses: [0, 200]
+    })]
+  }), 'GET');
+  workbox.registerRoute(/\.(js|css|png|jpg|jpeg|svg|ico)$/, new workbox.StaleWhileRevalidate({
+    "cacheName": "static-resources",
+    plugins: [new workbox.ExpirationPlugin({
+      maxEntries: 100,
+      maxAgeSeconds: 604800
     })]
   }), 'GET');
 

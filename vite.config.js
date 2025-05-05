@@ -6,30 +6,69 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'prompt',
-      includeAssets: ['favicon.ico', 'robots.txt', 'logo.png'],
+      registerType: 'autoUpdate', // Changed from 'prompt' to 'autoUpdate' for better user experience
+      injectRegister: 'auto',     // Automatically inject the service worker register
+      includeAssets: ['favicon.ico', 'robots.txt', 'logo.png', 'apple-touch-icon.png'],
       manifest: {
         name: 'Leafalyze',
         short_name: 'Leafalyze',
         description: 'A Progressive Web App for Raspberry Pi',
         theme_color: '#ffffff',
         start_url: '/',
+        id: '/',
         display: 'standalone',
+        orientation: 'portrait',
         background_color: '#ffffff',
         icons: [
           {
-            src: '/logo.svg.png?v=2', // Cache-busting query parameter
+            src: '/logo.png',
             sizes: '192x192',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any'
           },
           {
-            src: '/logo.svg.png?v=2', // Cache-busting query parameter
+            src: '/logo.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any'
+          },
+          {
+            src: '/logo.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/logo.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
           }
-        ]
+        ],
+        screenshots: [
+          {
+            src: '/logo.png',
+            sizes: '1280x720',
+            type: 'image/png',
+            form_factor: 'wide',
+            label: 'Leafalyze Dashboard'
+          },
+          {
+            src: '/logo.png',
+            sizes: '750x1334',
+            type: 'image/png',
+            form_factor: 'narrow',
+            label: 'Leafalyze Mobile View'
+          }
+        ],
+        shortcuts: [
+          {
+            name: 'Dashboard',
+            url: '/dashboard',
+            description: 'View your dashboard'
+          }
+        ],
+        categories: ['productivity', 'utilities']
       },
       workbox: {
         cleanupOutdatedCaches: true,
@@ -37,7 +76,7 @@ export default defineConfig({
         clientsClaim: true,
         runtimeCaching: [
           {
-          urlPattern: /^https:\/\/leafalyze-frontend-kdly\.vercel\.app\/.*/i,
+            urlPattern: new RegExp('^https://leafalyze-frontend-kdly\\.vercel\\.app/.*', 'i'),
             handler: 'NetworkFirst',
             options: {
               cacheName: 'leafalyze-cache',
@@ -49,13 +88,25 @@ export default defineConfig({
                 statuses: [0, 200] // Cache successful responses
               }
             }
+          },
+          {
+            urlPattern: /\.(js|css|png|jpg|jpeg|svg|ico)$/,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'static-resources',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 7 // Cache for 7 days
+              }
+            }
           }
         ],
         navigateFallback: '/index.html', // Use SPA navigation fallback
-        navigateFallbackAllowlist: [/^(?!\/__).*/] // Don't cache certain assets like admin routes
+        navigateFallbackDenylist: [/^\/api/, /\/admin/] // Don't cache certain assets
       },
       devOptions: {
-        enabled: true
+        enabled: true,
+        type: 'module'
       }
     })
   ],
