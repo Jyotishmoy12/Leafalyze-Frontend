@@ -8,8 +8,6 @@ const Card = ({ children, className = "" }) => (
   </div>
 );
 
-//comments
-
 const CardHeader = ({ children }) => (
   <div className="p-6 border-b border-gray-100">
     {children}
@@ -54,6 +52,7 @@ const Analysis = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [roboflowResult, setRoboflowResult] = useState(null);
   const [serverStatus, setServerStatus] = useState('unknown');
+  const [showDetailedImages, setShowDetailedImages] = useState(false);
 
   // Check server health on component mount
   React.useEffect(() => {
@@ -139,6 +138,7 @@ const Analysis = () => {
       setImagePreview(null);
       setRoboflowResult(null);
       setError(null);
+      setShowDetailedImages(false);
       setAnalysisResults({
         chlorophyll: null,
         nitrogen: null,
@@ -208,6 +208,9 @@ const Analysis = () => {
       
       // Process the data to extract meaningful metrics
       processAnalysisResults(data);
+      
+      // Show the detailed images section
+      setShowDetailedImages(true);
       
       console.log("Roboflow result:", data);
     } catch (err) {
@@ -507,57 +510,72 @@ const Analysis = () => {
                         <span className="font-medium">{analysisResults.disease_probability ? analysisResults.disease_probability.toFixed(1) : '?'}%</span>
                       </div>
                     </div>
-
-                    {/* Chlorophyll Content */}
-                    <div className="p-4 border border-gray-100 rounded-lg">
-                      <div className="text-lg font-light mb-1">Chlorophyll Content</div>
-                      <div className="flex items-center">
-                        <div className="w-full bg-gray-200 rounded-full h-4 mr-2">
-                          <div 
-                            className="h-4 rounded-full bg-green-500" 
-                            style={{
-                              width: `${analysisResults.chlorophyll || 0}%`
-                            }}
-                          ></div>
-                        </div>
-                        <span className="font-medium">{analysisResults.chlorophyll ? analysisResults.chlorophyll.toFixed(1) : '?'}%</span>
-                      </div>
-                    </div>
-
-                    {/* Nitrogen Level */}
-                    <div className="p-4 border border-gray-100 rounded-lg">
-                      <div className="text-lg font-light mb-1">Nitrogen Level</div>
-                      <div className="flex items-center">
-                        <div className="w-full bg-gray-200 rounded-full h-4 mr-2">
-                          <div 
-                            className="h-4 rounded-full bg-blue-500" 
-                            style={{
-                              width: `${analysisResults.nitrogen || 0}%`
-                            }}
-                          ></div>
-                        </div>
-                        <span className="font-medium">{analysisResults.nitrogen ? analysisResults.nitrogen.toFixed(1) : '?'}%</span>
-                      </div>
-                    </div>
-
-                    {/* Moisture Content */}
-                    <div className="p-4 border border-gray-100 rounded-lg">
-                      <div className="text-lg font-light mb-1">Moisture Content</div>
-                      <div className="flex items-center">
-                        <div className="w-full bg-gray-200 rounded-full h-4 mr-2">
-                          <div 
-                            className="h-4 rounded-full bg-blue-400" 
-                            style={{
-                              width: `${analysisResults.moisture || 0}%`
-                            }}
-                          ></div>
-                        </div>
-                        <span className="font-medium">{analysisResults.moisture ? analysisResults.moisture.toFixed(1) : '?'}%</span>
-                      </div>
-                    </div>
                   </div>
                 </CardContent>
               </Card>
+              
+              {/* Detailed Image Analysis Section - This appears only after analysis */}
+              {showDetailedImages && (
+                <Card className="mt-8">
+
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* Chlorophyll Distribution */}
+                      <div className="rounded-lg overflow-hidden border border-gray-100">
+                        <div className="p-4 bg-gray-50 border-b border-gray-100">
+                          <h4 className="font-medium">F1-Confidence Curve </h4>
+                         
+                        </div>
+                        <div className="aspect-video bg-white p-4">
+                          <div className="w-full h-full bg-gray-100 rounded flex items-center justify-center overflow-hidden">
+                            <img src="/F1_curve.png" alt="Chlorophyll Analysis" className="w-full h-full" />
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Nitrogen Map */}
+                      <div className="rounded-lg overflow-hidden border border-gray-100">
+                        <div className="p-4 bg-gray-50 border-b border-gray-100">
+                          <h4 className="font-medium">Precision-Confidence Curve</h4>
+                          
+                        </div>
+                        <div className="aspect-video bg-white p-4">
+                          <div className="w-full h-full bg-gray-100 rounded flex items-center justify-center overflow-hidden">
+                            <img src="/P_curve.png" alt="Nitrogen Distribution" className="w-full h-full r" />
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Disease Detection */}
+                      <div className="rounded-lg overflow-hidden border border-gray-100">
+                        <div className="p-4 bg-gray-50 border-b border-gray-100">
+                          <h4 className="font-medium">Precision-Recall Curve</h4>
+                          
+                        </div>
+                        <div className="aspect-video bg-white p-4">
+                          <div className="w-full h-full bg-gray-100 rounded flex items-center justify-center overflow-hidden">
+                            <img src="/PR_curve.png" alt="Disease Detection" className="w-full h-full" />
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Moisture Content */}
+                      <div className="rounded-lg overflow-hidden border border-gray-100">
+                        <div className="p-4 bg-gray-50 border-b border-gray-100">
+                          <h4 className="font-medium">Model Performance</h4>
+                          
+                        </div>
+                        <div className="aspect-video bg-white p-4">
+                          <div className="w-full h-full bg-gray-100 rounded flex items-center justify-center overflow-hidden">
+                            <img src="/img2.png" alt="Moisture Analysis" className="w-full h-full " />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </CardContent>
+                </Card>
+              )}
             </>
           )}
         </div>
